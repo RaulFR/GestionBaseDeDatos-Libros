@@ -9,7 +9,8 @@ import entities.Libros;
 import entities.Editoriales;
 import java.awt.Frame;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import limiters.DocumentCharactersLimiter;
+import limiters.DocumentNumbersLimiter;
 
 /**
  *
@@ -22,7 +23,23 @@ public class DatosLibros extends javax.swing.JPanel {
      */
     Libros libro;
     Editoriales editorial;
-
+    
+    //Control cantidad de caracteres en cada campo
+    DocumentCharactersLimiter d1 = new DocumentCharactersLimiter();
+    DocumentCharactersLimiter d2 = new DocumentCharactersLimiter();
+    DocumentNumbersLimiter d3 = new DocumentNumbersLimiter();
+    DocumentNumbersLimiter d4 = new DocumentNumbersLimiter();
+    public void setLimitCampos(){    
+        d1.setLimit(80);
+        jTextFieldTitutlo.setDocument(d1);
+        d2.setLimit(80);
+        jTextFieldAutor.setDocument(d2);
+//        d3.setLimit(10);
+//        jTextFieldPrecio.setDocument(d3);
+        d4.setLimit(9);
+        jTextFieldStockActual.setDocument(d4);
+    }
+    
     public DatosLibros() {
         initComponents();
     }

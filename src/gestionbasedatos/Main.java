@@ -16,6 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import renderer.FechaRenderer;
+import renderer.StockRenderer;
 
 /**
  *
@@ -52,13 +53,23 @@ public class Main extends javax.swing.JFrame {
         modelo.setDataList(list1);
         jTable1.setModel(modelo);
         activarCampos(false);
+        datosLibros1.setLimitCampos();
         //Establece el boton buscar por defecto de forma general
         //getRootPane().setDefaultButton(b_Buscar); 
         //Solo se permite seleccionar un registro
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.getColumnModel().getColumn(2).setCellRenderer(new PrecioRenderer());
-        jTable1.getColumnModel().getColumn(5).setCellRenderer(new AgotandoseRenderer());
         jTable1.getColumnModel().getColumn(4).setCellRenderer(new FechaRenderer());
+        jTable1.getColumnModel().getColumn(5).setCellRenderer(new AgotandoseRenderer());
+        jTable1.getColumnModel().getColumn(6).setCellRenderer(new StockRenderer());
+
+        //Cambiar ancho de columnas
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(252);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(178);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(87);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(202);
+        jTable1.getColumnModel().getColumn(4).setPreferredWidth(76);
+        jTable1.getColumnModel().getColumn(5).setPreferredWidth(85);
 
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -119,7 +130,7 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 400));
-        setPreferredSize(new java.awt.Dimension(818, 562));
+        setPreferredSize(new java.awt.Dimension(980, 562));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -283,10 +294,11 @@ public class Main extends javax.swing.JFrame {
             //Modificar valores de las propiedades del objeto Libro
 
             libro = datosLibros1.setDatos();
-            int idEditorial = datosLibros1.getEditorial().getIdEditorial();
-            Editoriales editorial = entityManager1.find(Editoriales.class, idEditorial);
-            libro.setIdEditorial(editorial);
-
+            if (datosLibros1.getEditorial() != null) {
+                int idEditorial = datosLibros1.getEditorial().getIdEditorial();
+                Editoriales editorial = entityManager1.find(Editoriales.class, idEditorial);
+                libro.setIdEditorial(editorial);
+            }
             if (esNuevo) {
 //                int idProducto = datosLibros1.getEditorial().getId();
 //                Editoriales editorial = entityManager1.find(Editoriales.class, idProducto);
@@ -445,6 +457,14 @@ public class Main extends javax.swing.JFrame {
                 "Disponible en la próxima versión",
                 "Información",
                 JOptionPane.INFORMATION_MESSAGE);
+
+        System.out.println(jTable1.getColumnModel().getColumn(0).getWidth());
+        System.out.println(jTable1.getColumnModel().getColumn(1).getWidth());
+        System.out.println(jTable1.getColumnModel().getColumn(2).getWidth());
+        System.out.println(jTable1.getColumnModel().getColumn(3).getWidth());
+        System.out.println(jTable1.getColumnModel().getColumn(4).getWidth());
+        System.out.println(jTable1.getColumnModel().getColumn(5).getWidth());
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextFieldBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyPressed
