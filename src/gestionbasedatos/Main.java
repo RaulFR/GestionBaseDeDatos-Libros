@@ -293,7 +293,7 @@ public class Main extends javax.swing.JFrame {
         if (!datosLibros1.isCamposVacios()) {
             if (datosLibros1.comprobarPrecio()) {
                 JOptionPane.showMessageDialog(this,
-                        "El precio debe ser menor de 1.000.000",
+                        "El precio debe ser menor de 1.000.000 y solo puede contener un punto como separador de decimales",
                         "Atención", JOptionPane.WARNING_MESSAGE);
             } else {
                 if (!datosLibros1.comprobarStock()) {
@@ -395,9 +395,9 @@ public class Main extends javax.swing.JFrame {
             //Distinguir que no es una película nueva para el momento de guardala
             esNuevo = false;
             //Obtener el objeto Libro que se encuentra seleccionado en la lista
-//            int idLibro = jTable.
-//            libro = entityManager1.find(Libros.class, idLibro);
-//            datosLibros1.setLibro(libro);
+            int idLibro = jTable1.getSelectedRow()+1;
+            libro = entityManager1.find(Libros.class, idLibro);
+            datosLibros1.setLibro(libro);
             
             //Bloquear la tabla
             jTable1.setEnabled(false);

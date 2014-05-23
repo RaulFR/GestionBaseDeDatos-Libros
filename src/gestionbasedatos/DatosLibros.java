@@ -55,7 +55,7 @@ public class DatosLibros extends javax.swing.JPanel {
         try {
             num = Double.valueOf(jTextFieldPrecio.getText());
         } catch (NumberFormatException ex) {
-            return false;
+            return true;
         }
         return (num > 1000000);
     }
