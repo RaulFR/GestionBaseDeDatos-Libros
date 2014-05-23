@@ -157,7 +157,7 @@ CREATE TABLE `libros` (
   `IdTema` int(2) unsigned,
   `PRECIOCOSTE` decimal(8,2) DEFAULT '0.00',
   `PVPSINIVA` decimal(8,2) DEFAULT '0.00',
-  `STOCKACTUAL` int(8) unsigned DEFAULT '0',
+  `STOCKACTUAL` int(8) DEFAULT '0',
   `STOCKMINIMO` int(8) unsigned DEFAULT '0',
   `STOCKMAXIMO` int(8) unsigned DEFAULT '0',
   FechaEdicion date,

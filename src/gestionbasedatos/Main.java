@@ -291,44 +291,54 @@ public class Main extends javax.swing.JFrame {
 
     private void b_GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_GuardarActionPerformed
         if (!datosLibros1.isCamposVacios()) {
-            //Modificar valores de las propiedades del objeto Libro
-
-            libro = datosLibros1.setDatos();
-            if (datosLibros1.getEditorial() != null) {
-                int idEditorial = datosLibros1.getEditorial().getIdEditorial();
-                Editoriales editorial = entityManager1.find(Editoriales.class, idEditorial);
-                libro.setIdEditorial(editorial);
-            }
-            if (esNuevo) {
-//                int idProducto = datosLibros1.getEditorial().getId();
-//                Editoriales editorial = entityManager1.find(Editoriales.class, idProducto);
-//                System.out.println(editorial.getNombre());
-                entityManager1.getTransaction().begin();
-                //Almacenar el objeto en la BD
-                entityManager1.persist(libro);
-                entityManager1.getTransaction().commit();
-                //Añadir un nuevo libro al final de la lista
-                list1.add(libro);
-                modelo.fireTableRowsInserted(list1.size() - 1, list1.size() - 1);
+            if (datosLibros1.comprobarPrecio()) {
+                JOptionPane.showMessageDialog(this,
+                        "El precio debe ser menor de 1.000.000",
+                        "Atención", JOptionPane.WARNING_MESSAGE);
             } else {
-                //Cambiar el libro que se encuentra seleccionado en la lista
-                int selectedRow = jTable1.getSelectedRow();
-                entityManager1.getTransaction().begin();
-                //Actualizar el objeto en la BD
-                entityManager1.merge(libro);
-                entityManager1.getTransaction().commit();
-                //Añadir el objeto donde estaba el objeto anterior
-                list1.set(selectedRow, libro);
-                //Informar al JTable que se ha modificado la fila seleccionada
-                modelo.fireTableRowsUpdated(selectedRow, selectedRow);
-            }
+                if (!datosLibros1.comprobarStock()) {
+                    JOptionPane.showMessageDialog(this,
+                            "El stock debe ser un numero",
+                            "Atención", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    //Modificar valores de las propiedades del objeto Libro
 
-            //Desactivar los campos de edición y activar los botones de menú y lista
-            activarCampos(false);
-            //Dejar los campos vacíos
-            datosLibros1.limpiarCampos();
-            //Desbloquear la tabla
-            jTable1.setEnabled(true);
+                    libro = datosLibros1.setDatos();
+                    if (datosLibros1.getEditorial() != null) {
+                        int idEditorial = datosLibros1.getEditorial().getIdEditorial();
+                        Editoriales editorial = entityManager1.find(Editoriales.class, idEditorial);
+                        libro.setIdEditorial(editorial);
+                    }
+
+                    if (esNuevo) {
+                        entityManager1.getTransaction().begin();
+                        //Almacenar el objeto en la BD
+                        entityManager1.persist(libro);
+                        entityManager1.getTransaction().commit();
+                        //Añadir un nuevo libro al final de la lista
+                        list1.add(libro);
+                        modelo.fireTableRowsInserted(list1.size() - 1, list1.size() - 1);
+                    } else {
+                        //Cambiar el libro que se encuentra seleccionado en la lista
+                        int selectedRow = jTable1.getSelectedRow();
+                        entityManager1.getTransaction().begin();
+                        //Actualizar el objeto en la BD
+                        entityManager1.merge(libro);
+                        entityManager1.getTransaction().commit();
+                        //Añadir el objeto donde estaba el objeto anterior
+                        list1.set(selectedRow, libro);
+                        //Informar al JTable que se ha modificado la fila seleccionada
+                        modelo.fireTableRowsUpdated(selectedRow, selectedRow);
+                    }
+
+                    //Desactivar los campos de edición y activar los botones de menú y lista
+                    activarCampos(false);
+                    //Dejar los campos vacíos
+                    datosLibros1.limpiarCampos();
+                    //Desbloquear la tabla
+                    jTable1.setEnabled(true);
+                }
+            }
         } else {
             JOptionPane.showMessageDialog(this,
                     "No se puede dejar campos vacios",
@@ -384,6 +394,11 @@ public class Main extends javax.swing.JFrame {
             activarCampos(true);
             //Distinguir que no es una película nueva para el momento de guardala
             esNuevo = false;
+            //Obtener el objeto Libro que se encuentra seleccionado en la lista
+//            int idLibro = jTable.
+//            libro = entityManager1.find(Libros.class, idLibro);
+//            datosLibros1.setLibro(libro);
+            
             //Bloquear la tabla
             jTable1.setEnabled(false);
         } else {
@@ -400,6 +415,7 @@ public class Main extends javax.swing.JFrame {
         datosLibros1.limpiarCampos();
         esNuevo = true;
         libro = new Libros();
+        datosLibros1.setLibro(new Libros());
         //Bloquear la tabla
         jTable1.setEnabled(false);
     }//GEN-LAST:event_b_NuevoActionPerformed

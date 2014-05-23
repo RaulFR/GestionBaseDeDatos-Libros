@@ -11,6 +11,7 @@ import java.awt.Frame;
 import java.math.BigDecimal;
 import limiters.DocumentCharactersLimiter;
 import limiters.DocumentNumbersLimiter;
+import limiters.DocumentPreciosLimiter;
 
 /**
  *
@@ -23,29 +24,49 @@ public class DatosLibros extends javax.swing.JPanel {
      */
     Libros libro;
     Editoriales editorial;
-    
+
     //Control cantidad de caracteres en cada campo
     DocumentCharactersLimiter d1 = new DocumentCharactersLimiter();
     DocumentCharactersLimiter d2 = new DocumentCharactersLimiter();
-    DocumentNumbersLimiter d3 = new DocumentNumbersLimiter();
+    DocumentPreciosLimiter d3 = new DocumentPreciosLimiter();
     DocumentNumbersLimiter d4 = new DocumentNumbersLimiter();
-    public void setLimitCampos(){    
+
+    public void setLimitCampos() {
         d1.setLimit(80);
         jTextFieldTitutlo.setDocument(d1);
         d2.setLimit(80);
         jTextFieldAutor.setDocument(d2);
-//        d3.setLimit(10);
-//        jTextFieldPrecio.setDocument(d3);
+        d3.setLimit(9);
+        jTextFieldPrecio.setDocument(d3);
         d4.setLimit(9);
         jTextFieldStockActual.setDocument(d4);
     }
-    
+
     public DatosLibros() {
         initComponents();
     }
 
     public void setLibro(Libros libro) {
         this.libro = libro;
+    }
+
+    public boolean comprobarPrecio() {
+        Double num;
+        try {
+            num = Double.valueOf(jTextFieldPrecio.getText());
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return (num > 1000000);
+    }
+
+    public boolean comprobarStock() {
+        try {
+            Integer.valueOf(jTextFieldStockActual.getText());
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
     }
 
     public void showDates() {
@@ -91,26 +112,24 @@ public class DatosLibros extends javax.swing.JPanel {
     }
 
     public Libros setDatos() {
-        Libros libronuevo = new Libros();
-        libronuevo.setTitulo(jTextFieldTitutlo.getText());
-        libronuevo.setAutores(jTextFieldAutor.getText());
-        libronuevo.setPvpsiniva(BigDecimal.valueOf(Double.valueOf(jTextFieldPrecio.getText())));
-        //editorial.setNombre(jTextField4.getText());
-        //libronuevo.setIdEditorial(editorial);
-        libronuevo.setFechaEdicion(jDateChooser1.getDate());
-        libronuevo.setStockactual(Integer.valueOf(jTextFieldStockActual.getText()));
-        return libronuevo;
+        libro.setTitulo(jTextFieldTitutlo.getText());
+        libro.setAutores(jTextFieldAutor.getText());
+        libro.setPvpsiniva(BigDecimal.valueOf(Double.valueOf(jTextFieldPrecio.getText())));
+        libro.setFechaEdicion(jDateChooser1.getDate());
+        libro.setStockactual(Integer.valueOf(jTextFieldStockActual.getText()));
+        return libro;
     }
-    public void setfocus(){
+
+    public void setfocus() {
         jTextFieldTitutlo.requestFocus();
     }
-    
-    public void activarBEditoriales(boolean activar){
+
+    public void activarBEditoriales(boolean activar) {
         b_Editoriales.setEnabled(activar);
     }
 
     public void showEditorial() {
-        if(editorial != null) {
+        if (editorial != null) {
             jTextFieldEditorial.setText(editorial.getIdEditorial() + " - " + editorial.getNombre());
         }
     }
@@ -118,8 +137,7 @@ public class DatosLibros extends javax.swing.JPanel {
     public Editoriales getEditorial() {
         return editorial;
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -244,7 +262,7 @@ public class DatosLibros extends javax.swing.JPanel {
         Frame frameParent = Frame.getFrames()[0];
         DialogListaEditoriales dialogListaEditoriales = new DialogListaEditoriales(frameParent, true);
         dialogListaEditoriales.setVisible(true);
-        
+
         //Obtener la editorial que se ha seleccionado en la ventana de diálogo
         editorial = dialogListaEditoriales.getEditorialSelec();
         showEditorial();
